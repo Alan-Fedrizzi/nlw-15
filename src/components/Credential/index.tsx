@@ -1,3 +1,6 @@
+import { QRCode } from "@/components/Qrcode";
+import { colors } from "@/styles/colors";
+import { Feather } from "@expo/vector-icons";
 import {
   Image,
   ImageBackground,
@@ -9,13 +12,14 @@ import { credentialStyles } from "./styles";
 
 const {
   base,
-  image,
+  imageStyles,
   container,
   imageBackground,
   textContainer,
   text,
   shadow,
   avatar,
+  buttonAvatar,
   name,
   email,
   qrcode,
@@ -23,12 +27,19 @@ const {
   ampliar,
 } = credentialStyles();
 
-type Props = {};
+type Props = {
+  image?: string;
+  onChangeAvatar?: () => void;
+  onExpandQRCode?: () => void;
+};
 
-export function Credential({}: Props) {
+export function Credential({ image, onChangeAvatar, onExpandQRCode }: Props) {
   return (
     <View className={base()}>
-      <Image className={image()} source={require("@/assets/ticket/band.png")} />
+      <Image
+        className={imageStyles()}
+        source={require("@/assets/ticket/band.png")}
+      />
 
       <View className={container()}>
         <ImageBackground
@@ -44,22 +55,40 @@ export function Credential({}: Props) {
           <View className={shadow()} />
         </ImageBackground>
 
-        <Image
-          className={avatar()}
-          source={{
-            uri: "https://github.com/Alan-Fedrizzi.png",
-          }}
-        />
+        {image ? (
+          <TouchableOpacity activeOpacity={0.7} onPress={onChangeAvatar}>
+            <Image
+              className={avatar()}
+              source={{
+                // uri: "https://github.com/Alan-Fedrizzi.png",
+                uri: image,
+              }}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            className={buttonAvatar()}
+            onPress={onChangeAvatar}
+          >
+            <Feather name="camera" color={colors.green[400]} size={32} />
+          </TouchableOpacity>
+        )}
 
         <Text className={name()}>Alan Fedrizzi</Text>
         <Text className={email()}>test@email.com</Text>
 
-        <Image
+        <QRCode value="teste" size={120} />
+        {/* <Image
           className={qrcode()}
           source={require("@/assets/ticket/qrcode.png")}
-        />
+        /> */}
 
-        <TouchableOpacity className={ampliarButton()} activeOpacity={0.7}>
+        <TouchableOpacity
+          className={ampliarButton()}
+          activeOpacity={0.7}
+          onPress={onExpandQRCode}
+        >
           <Text className={ampliar()}>Ampliar QRCode</Text>
         </TouchableOpacity>
       </View>
