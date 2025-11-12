@@ -59,3 +59,9 @@ export default function Home() {
     </View>
   );
 }
+
+// cd server
+// npm run dev
+
+// cd mobile
+// npm start
