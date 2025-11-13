@@ -49,6 +49,7 @@ export default function Register() {
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
 
       // essa exceção vem da requisição? vem do axios?
       if (axios.isAxiosError(error)) {
@@ -62,8 +63,6 @@ export default function Register() {
       }
 
       Alert.alert("Inscrição", "Não foi possível fazer a inscrição.");
-    } finally {
-      setIsLoading(false);
     }
   }
 

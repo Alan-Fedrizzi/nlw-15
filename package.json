@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo-google-fonts/roboto": "^0.4.1",
     "@expo/vector-icons": "^15.0.3",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "@react-navigation/native": "^7.1.8",
     "axios": "^1.13.2",
     "expo": "~54.0.20",
@@ -34,7 +35,8 @@
     "react-native-web": "~0.21.0",
     "react-native-worklets": "0.5.1",
     "tailwind-merge": "^3.3.1",
-    "tailwind-variants": "^3.1.1"
+    "tailwind-variants": "^3.1.1",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
