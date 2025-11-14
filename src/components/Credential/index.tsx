@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { credentialStyles } from "./styles";
+import { BadgeStore } from "@/store/badge-store";
 
 const {
   base,
@@ -28,12 +29,18 @@ const {
 } = credentialStyles();
 
 type Props = {
+  data: BadgeStore;
   image?: string;
   onChangeAvatar?: () => void;
   onExpandQRCode?: () => void;
 };
 
-export function Credential({ image, onChangeAvatar, onExpandQRCode }: Props) {
+export function Credential({
+  data,
+  image,
+  onChangeAvatar,
+  onExpandQRCode,
+}: Props) {
   return (
     <View className={base()}>
       <Image
@@ -47,8 +54,9 @@ export function Credential({ image, onChangeAvatar, onExpandQRCode }: Props) {
           className={imageBackground()}
         >
           <View className={textContainer()}>
-            <Text className={text()}>Unite summit</Text>
-            <Text className={text()}>#123</Text>
+            <Text className={text()}>{data.eventTitle}</Text>
+            {/* o bak não manda o id */}
+            <Text className={text()}>#{data.id}</Text>
           </View>
 
           {/* efeito de sombra */}
@@ -75,10 +83,10 @@ export function Credential({ image, onChangeAvatar, onExpandQRCode }: Props) {
           </TouchableOpacity>
         )}
 
-        <Text className={name()}>Alan Fedrizzi</Text>
-        <Text className={email()}>test@email.com</Text>
+        <Text className={name()}>{data.name}</Text>
+        <Text className={email()}>{data.email}</Text>
 
-        <QRCode value="teste" size={120} />
+        <QRCode value={data.checkInURL} size={120} />
         {/* <Image
           className={qrcode()}
           source={require("@/assets/ticket/qrcode.png")}

@@ -1,6 +1,7 @@
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { api } from "@/server/api";
+import { useBadgeStore } from "@/store/badge-store";
 import { colors } from "@/styles/colors";
 import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
@@ -24,6 +25,8 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const badgeStore = useBadgeStore();
+
   async function handleRegister() {
     try {
       if (!name.trim() || !email.trim()) {
@@ -40,6 +43,12 @@ export default function Register() {
       // server\src\routes\register-for-event.ts
       // retorna o attendeeId
       if (registerResponse.data.attendeeId) {
+        const badgeResponse = await api.get(
+          `/attendees/${registerResponse.data.attendeeId}/badge`
+        );
+
+        badgeStore.save(badgeResponse.data.badge);
+
         Alert.alert("Inscrição", "Inscrição realizada com sucesso.", [
           {
             text: "OK",

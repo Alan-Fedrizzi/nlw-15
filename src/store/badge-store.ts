@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type BadgeStore = {
   id: string;
@@ -12,10 +14,21 @@ export type BadgeStore = {
 type StateProps = {
   data: BadgeStore | null;
   save: (data: BadgeStore) => void;
+  remove: () => void;
 };
 
-export const useBadgeStore = create<StateProps>((set) => ({
-  data: null,
-  save: (data: BadgeStore) => set(() => ({ data })),
-  // save: (data: BadgeStore) => set(() => ({ data: data })),
-}));
+export const useBadgeStore = create(
+  persist<StateProps>(
+    (set) => ({
+      data: null,
+      save: (data: BadgeStore) => set(() => ({ data })),
+      remove: () => set(() => ({ data: null })),
+    }),
+    {
+      // config do async storage
+      //name á  key
+      name: "nlw-unite:badge",
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);

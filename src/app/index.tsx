@@ -93,7 +93,7 @@ export default function Home() {
 
 // cd server
 // npm run dev
+// npx prisma studio
 
 // cd mobile
 // npm start
-// npx prisma studio
