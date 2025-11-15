@@ -15,6 +15,7 @@ type StateProps = {
   data: BadgeStore | null;
   save: (data: BadgeStore) => void;
   remove: () => void;
+  updateAvater: (uri: string) => void;
 };
 
 export const useBadgeStore = create(
@@ -23,6 +24,15 @@ export const useBadgeStore = create(
       data: null,
       save: (data: BadgeStore) => set(() => ({ data })),
       remove: () => set(() => ({ data: null })),
+      updateAvater: (uri: string) =>
+        set((state) => ({
+          data: state.data
+            ? {
+                ...state.data,
+                image: uri,
+              }
+            : state.data,
+        })),
     }),
     {
       // config do async storage

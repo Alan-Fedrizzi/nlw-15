@@ -11,6 +11,7 @@ import {
   Alert,
   Modal,
   ScrollView,
+  Share,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -18,6 +19,7 @@ import {
 } from "react-native";
 import { ticketStyles } from "./ticket.styles";
 import { Redirect } from "expo-router";
+import { MotiView } from "moti";
 
 const {
   base,
@@ -34,7 +36,7 @@ const {
 } = ticketStyles();
 
 export default function Ticket() {
-  const [image, setImage] = useState(""); // tipagem implícita
+  // const [image, setImage] = useState(""); // tipagem implícita
   const [expandedQRCode, setExpandedQRCode] = useState(false);
   const badgeStore = useBadgeStore();
 
@@ -51,11 +53,25 @@ export default function Ticket() {
       });
 
       if (result.assets) {
-        setImage(result.assets[0].uri);
+        // setImage(result.assets[0].uri);
+        badgeStore.updateAvater(result.assets[0].uri);
       }
     } catch (error) {
       console.log(error);
       Alert.alert("Foto", "Não foi possível selecionar a imagem.");
+    }
+  }
+
+  async function handleShare() {
+    try {
+      if (badgeStore.data?.checkInURL) {
+        await Share.share({
+          message: badgeStore.data.checkInURL,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Compartilhar", "Não foi possível compartilhar.");
     }
   }
 
@@ -77,17 +93,31 @@ export default function Ticket() {
         <Credential
           data={badgeStore.data}
           // image="https://github.com/Alan-Fedrizzi.png"
-          image={image}
+          // image={image}
           onChangeAvatar={handleSelectImage}
           onExpandQRCode={() => setExpandedQRCode(true)}
         />
 
-        <FontAwesome
-          className={arrow()}
-          name="angle-double-down"
-          size={24}
-          color={colors.gray[300]}
-        />
+        <MotiView
+          from={{
+            translateY: 0
+          }}
+          animate={{
+            translateY: 10
+          }}
+          transition={{
+            loop: true,
+            type: 'timing',
+            duration: 700
+          }}
+        >
+          <FontAwesome
+            className={arrow()}
+            name="angle-double-down"
+            size={24}
+            color={colors.gray[300]}
+            />
+        </MotiView>
 
         <Text className={text()}>Compartilhar credencial</Text>
         <Text className={message()}>
@@ -95,7 +125,8 @@ export default function Ticket() {
           {badgeStore.data.eventTitle}
         </Text>
 
-        <Button title="Compartilhar" />
+        <Button title="Compartilhar" onPress={handleShare} />
+
         <TouchableOpacity
           activeOpacity={0.7}
           className={remove()}
